@@ -2,6 +2,12 @@ import sys
 
 def calculate_ticket_price(age):
     # --- เขียนโค้ดของนักเรียนในส่วนนี้ / Write your code here ---
+    if age < 12:
+        return 120
+    elif 12 <= age <= 60:
+        return 200
+    else:  # age > 60
+        return 150
     pass
     # --------------------------------------------------------
 
@@ -12,7 +18,7 @@ def main():
         result = calculate_ticket_price(test_age)
         print(result)
     else:
-        test_age = 25
+        test_age = int(input("Enter age: "))
         result = calculate_ticket_price(test_age)
         print(f"Age: {test_age} -> Ticket Price: {result} Baht")
 
