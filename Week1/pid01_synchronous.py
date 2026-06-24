@@ -10,9 +10,8 @@ def make_coffee(customer_name):
     thread_name = threading.current_thread().name
 
     print(f"{ctime()} | [PID: {pid}] [TID: {thread_id}] [Thread Name: {thread_name}] กำลังชงกาแฟให้ ลูกค้า {customer_name}...")
-    sleep(5)  # บล็อกการทำงานของ Thread นี้ไว้ 5 วินาทีเต็ม
+    sleep(5) # บล็อกการทำงานของ Thread นี้ไว้ 5 วินาทีเต็มๆ
     print(f"{ctime()} | [PID: {pid}] [TID: {thread_id}] [Thread Name: {thread_name}] ลูกค้า {customer_name}: ได้รับกาแฟแล้ว!")
-
 
 def main():
     queue = ['A', 'B', 'C']
@@ -22,13 +21,12 @@ def main():
     print(f"{ctime()} | [Main PID: {main_pid}] [Main TID: {main_tid}] === เริ่มระบบจำลองตู้กาแฟแบบ Synchronous ===")
     start_time = time()
 
-    # ลูปทำงานตามลำดับคิวเดียว (ทีละคน)
+    # ลูปทำงานตามลำดับคิวเดี่ยว (ทีละคน)
     for customer in queue:
         make_coffee(customer)
 
     duration = time() - start_time
-    print(f"{ctime()} | ใช้เวลารวมทั้งหมด: {duration:0.2f} วินาที")
-
+    print(f"{ctime()} | ใช้เวลารวมทั้งหมด: {duration:.2f} วินาที")
 
 if __name__ == "__main__":
     main()

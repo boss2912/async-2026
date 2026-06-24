@@ -4,72 +4,36 @@ import os
 
 # ฟังก์ชันจำลองการทำกาแฟให้ลูกค้า 1 คน
 def make_coffee(customer_name):
-
     # ดึง PID ของระบบ (จะเหมือนกันทุก Thread)
     pid = os.getpid()
-
     thread_id = threading.current_thread().native_id
     thread_name = threading.current_thread().name
 
-    print(
-        f"{ctime()} | [PID: {pid}] "
-        f"[TID: {thread_id}] "
-        f"[Thread Name: {thread_name}] "
-        f"กำลังชงกาแฟให้ ลูกค้า {customer_name}..."
-    )
-
-    sleep(5)  # บล็อกการทำงานของ Thread นี้ไว้ 5 วินาที
-
-    print(
-        f"{ctime()} | [PID: {pid}] "
-        f"[TID: {thread_id}] "
-        f"[Thread Name: {thread_name}] "
-        f"ลูกค้า {customer_name}: ได้รับกาแฟแล้ว!"
-    )
-
+    print(f"{ctime()} | [PID: {pid}] [TID: {thread_id}] [Thread Name: {thread_name}] กำลังชงกาแฟให้ ลูกค้า {customer_name}...")
+    sleep(5) # บล็อกการทำงานของ Thread นี้ไว้ 5 วินาทีเต็มๆ
+    print(f"{ctime()} | [PID: {pid}] [TID: {thread_id}] [Thread Name: {thread_name}] ลูกค้า {customer_name}: ได้รับกาแฟแล้ว!")
 
 def main():
-
     queue = ['A', 'B', 'C']
-
     main_pid = os.getpid()
     main_tid = threading.current_thread().native_id
 
-    print(
-        f"{ctime()} | [Main PID: {main_pid}] "
-        f"[Main TID: {main_tid}] "
-        f"=== เริ่มระบบจำลองร้านกาแฟแบบ Multi-Thread ==="
-    )
-
+    print(f"{ctime()} | [Main PID: {main_pid}] [Main TID: {main_tid}] === เริ่มระบบจำลองตู้กาแฟแบบ Multi-Thread ===")
     start_time = time()
 
     threads = []
-
-    # สร้าง Thread สำหรับลูกค้าแต่ละคน
+    # ลูปการทำงาน Thread
     for customer in queue:
-
-        # ตั้งชื่อ Thread ตามชื่อลูกค้า
-        t = threading.Thread(
-            target=make_coffee,
-            args=(customer,),
-            name=f"Thread-{customer}"
-        )
-
+        # เราสามารถตั้งชื่อ Thread ผ่านพารามิเตอร์ name= ได้เพื่อให้ไล่โค้ดง่ายขึ้น
+        t = threading.Thread(target=make_coffee, args=(customer,), name=f"Thread-{customer}")
         threads.append(t)
-
-        # เริ่มทำงานพร้อมกัน
         t.start()
 
-    # รอให้ทุก Thread ทำงานเสร็จ
     for t in threads:
         t.join()
 
     duration = time() - start_time
-
-    print(
-        f"{ctime()} | ใช้เวลารวมทั้งหมด: {duration:.2f} วินาที"
-    )
-
+    print(f"{ctime()} | ใช้เวลารวมทั้งหมด: {duration:.2f} วินาที")
 
 if __name__ == "__main__":
     main()
