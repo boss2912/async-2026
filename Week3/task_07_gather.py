@@ -9,7 +9,7 @@ async def fetch_db_record(table_name, latency):
 async def main():
     start = time()
     
-    # 
+    # asyncio.gather fires items concurrently and collects responses into a single ordered list # ทำตามลำดับที่ส่งเข้าไป
     results = await asyncio.gather(
         fetch_db_record("Users", 1.0),
         fetch_db_record("Products", 0.5),
@@ -17,6 +17,6 @@ async def main():
     )
     
     print(f"{ctime()} Aggregated Output Results List: {results}")
-    print(f"{ctime()} Execution Completed in: {time() - start:.2f} seconds") #
+    print(f"{ctime()} Execution Completed in: {time() - start:.2f} seconds") # Expected: ~1.0 seconds
 
 asyncio.run(main())

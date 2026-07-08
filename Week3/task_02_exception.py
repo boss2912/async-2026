@@ -4,21 +4,21 @@ from time import ctime
 
 async def division_worker(a, b):
     await asyncio.sleep(0.5)
-    return a / b # 
+    return a / b # Will raise ZeroDivisionError if b == 0
 
 async def main():
     task_success = asyncio.create_task(division_worker(10, 2))
     task_fail = asyncio.create_task(division_worker(10, 0))
 
-    # 
+    # Wait for both tasks to finalize operations
     await asyncio.sleep(1)
     
-    # 
+    # Retrieve successful value using .result()
     if task_success.done() and not task_success.exception():
-        print(f"{ctime()} Task Success Result: {task_success.result()}") # 
-        
-    # 
+        print(f"{ctime()} Task Success Result: {task_success.result()}") # Expected: 5.0
+
+    # Extract exception safely using .exception()
     if task_fail.done():
-        print(f"{ctime()} Task Fail Exception: {type(task_fail.exception()).__name__}") # 
+        print(f"{ctime()} Task Fail Exception: {type(task_fail.exception()).__name__}") # Expected: ZeroDivisionError
 
 asyncio.run(main())
