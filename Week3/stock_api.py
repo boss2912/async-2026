@@ -29,3 +29,4 @@ async def get_stock_price(server_name: str):
     }
 # pip install fastapi uvicorn httpx
 # วิธีรันเซิร์ฟเวอร์: uvicorn stock_api:app --reload --port 8088
+#

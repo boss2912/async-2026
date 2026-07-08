@@ -1,6 +1,6 @@
 # Assignment 1: Smart Courier System (40 คะแนน)
 # Objective: ตรวจสอบการคุมและการจัดการ CancelledError
-# Skills: create_task + name, .done(), .cancel(), CancelledError, .cancelled()
+# Skills: create_task + name, .done(), .cancel(), CancelledError, .cancelled()#
 
 import asyncio
 from time import ctime
