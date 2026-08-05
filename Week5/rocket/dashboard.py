@@ -48,7 +48,10 @@ html_code = f"""
     const canvas = document.getElementById('space');
     const ctx = canvas.getContext('2d');
 
+    const MAX_HP = 3;
     const rockets = {{}};
+    const bullets = {{}};
+    const explosions = [];  // {{x, y, start}} เอฟเฟกต์วงระเบิดตอนมีคนตาย
     const ws = new WebSocket("ws://{server_ip}:8088/ws/DASHBOARD");
 
     ws.onmessage = (event) => {{
@@ -56,12 +59,21 @@ html_code = f"""
 
         if (data.type === 'INIT') {{
             Object.assign(rockets, data.rockets);
-        }} else if (data.type === 'SPAWN' || data.type === 'UPDATE') {{
+            Object.assign(bullets, data.bullets || {{}});
+        }} else if (data.type === 'SPAWN' || data.type === 'UPDATE' || data.type === 'HIT') {{
             rockets[data.id] = data.rocket;
+        }} else if (data.type === 'DEAD') {{
+            if (data.rocket) {{
+                explosions.push({{ x: data.rocket.x, y: data.rocket.y, start: performance.now() }});
+            }}
+            delete rockets[data.id];
         }} else if (data.type === 'DESPAWN') {{
             delete rockets[data.id];
+        }} else if (data.type === 'TICK') {{
+            for (const key of Object.keys(bullets)) delete bullets[key];
+            Object.assign(bullets, data.bullets);
         }}
-        
+
         document.getElementById('counter').innerText = `Active Rockets: ${{Object.keys(rockets).length}} | Arena: 800 x 600`;
     }};
 
@@ -90,6 +102,38 @@ html_code = f"""
         ctx.fillText(id, x - 20, y - 25);
     }}
 
+    function drawHearts(x, y, hp) {{
+        const clampedHp = Math.max(0, Math.min(MAX_HP, hp ?? MAX_HP));
+        const heartsText = '❤'.repeat(clampedHp) + '♡'.repeat(MAX_HP - clampedHp);
+        ctx.fillStyle = '#ef4444';
+        ctx.font = '14px sans-serif';
+        ctx.fillText(heartsText, x - 20, y - 40);
+    }}
+
+    function drawBullet(x, y) {{
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#fbbf24';
+        ctx.fill();
+    }}
+
+    function drawExplosions() {{
+        const now = performance.now();
+        for (let i = explosions.length - 1; i >= 0; i--) {{
+            const exp = explosions[i];
+            const t = (now - exp.start) / 500;  // แสดงผลรวม 500ms แล้วหายไป
+            if (t >= 1) {{
+                explosions.splice(i, 1);
+                continue;
+            }}
+            ctx.beginPath();
+            ctx.arc(exp.x, exp.y, 10 + t * 30, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(251, 191, 36, ${{1 - t}})`;
+            ctx.lineWidth = 4;
+            ctx.stroke();
+        }}
+    }}
+
     function drawGrid(gridSize = 50) {{
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         ctx.lineWidth = 1;
@@ -116,7 +160,14 @@ html_code = f"""
 
         for (const [id, rocket] of Object.entries(rockets)) {{
             drawRocket(rocket.x, rocket.y, rocket.angle, rocket.color, id);
+            drawHearts(rocket.x, rocket.y, rocket.hp);
         }}
+
+        for (const bullet of Object.values(bullets)) {{
+            drawBullet(bullet.x, bullet.y);
+        }}
+
+        drawExplosions();
 
         requestAnimationFrame(render);
     }}
