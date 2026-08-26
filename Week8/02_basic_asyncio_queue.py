@@ -8,10 +8,10 @@ async def producer(queue: asyncio.Queue):
         await asyncio.sleep(0.5)
 
 async def consumer(queue: asyncio.Queue):
-    print("[Consumer] เริ่มการรอรับข้อมูลจากคิว...")
+    print("[Consumer] เริ่มการรอรับข้อมูลจากคิว...") #ทำไปก่อนที่จะเข้า Ev Loop
     while True:
         # ดึงข้อมูลออกจากคิว (ตัวที่เข้ามาก่อน จะถูกดึงออกมาก่อน)
-        item = await queue.get()
+        item = await queue.get() #อะไรที่อยู่ก่อน await แล้วเราสร้างทาก มันจะเริ่มทำก่อนเข้า Loop 
         print(f"[Consumer] ดึงข้อมูลออกมาประมวลผล: {item}")
         await asyncio.sleep(1)
         
