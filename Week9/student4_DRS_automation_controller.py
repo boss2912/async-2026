@@ -2,7 +2,7 @@ import asyncio
 import redis.asyncio as redis
 
 # ⚙️ CONFIGURATION
-REDIS_HOST = 'localhost'
+REDIS_HOST = '172.20.56.145'   # IP เครื่อง Redis Server ของกลุ่ม (เครื่องบอส) - ตอนแข่งจริงเปลี่ยนเป็น IP อาจารย์
 GROUP_ID = 'g01'
 STUDENT_ID = '66010004'
 

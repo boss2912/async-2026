@@ -3,9 +3,9 @@ import json
 import redis.asyncio as redis
 
 # ⚙️ CONFIGURATION
-REDIS_HOST = 'localhost'
-GROUP_ID = 'g01'
-STUDENT_ID = '66010005'
+REDIS_HOST = '172.16.46.79'   # IP เครื่อง Redis Server ของกลุ่ม (เครื่องบอส) - ตอนแข่งจริงเปลี่ยนเป็น IP อาจารย์
+GROUP_ID = 'g02'             # ระบุกลุ่มที่ต้องการดู เช่น g01
+STUDENT_ID = '6710301006'
 
 STREAM_KEY = f"f1:telemetry:{GROUP_ID}"
 GROUP_NAME = "f1_pitwall"

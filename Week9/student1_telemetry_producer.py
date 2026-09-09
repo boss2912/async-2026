@@ -5,8 +5,8 @@ import json
 import redis.asyncio as redis
 
 # ⚙️ CONFIGURATION
-REDIS_HOST = 'localhost'     # IP ของ Redis Server (เครื่องครู)
-GROUP_ID = 'g01'             # เลขกลุ่ม เช่น g01 - g08
+REDIS_HOST = '172.20.57.114'   # IP เครื่อง Redis Server ของกลุ่ม (เครื่องบอส) - ตอนแข่งจริงเปลี่ยนเป็น IP อาจารย์
+GROUP_ID = 'g03'             # เลขกลุ่ม เช่น g01 - g08
 STUDENT_ID = '66010001'      # รหัสนักศึกษาตนเอง
 
 STREAM_KEY = f"f1:telemetry:{GROUP_ID}"
